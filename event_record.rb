@@ -4,8 +4,8 @@ class EventRecord
   def add_event_details(name,date)
     begin
       date = date.split("-")
-      key = date[0] + "-" + date[1]
-      day = date[2]
+      key = date[0] + "-" + date[1].to_i.to_s
+      day = date[2].to_i.to_s
       @@events_name << name
       if @@events_date.has_key? (key)
         @@events_date[key].push([name,day])
@@ -41,7 +41,7 @@ class EventRecord
         print "Enter the required year\n"
         year = gets.chomp
         print "Enter the required month\n"
-        month = gets.chomp
+        month = gets.chomp.to_i.to_s
         if [1,3,5,7,8,10,12].include?(month.to_i)
           range = (1..31)
         elsif [4,6,9,11].include?(month.to_i)
@@ -83,8 +83,8 @@ class EventRecord
         date = gets.chomp
         date = date.split("-")
         year = date[0]
-        month = date[1]
-        day = date[2]
+        month = date[1].to_i.to_s
+        day = date[2].to_i.to_s
         flag = 0  
         key = year + "-" + month
         temp_array = @@events_date[key]
