@@ -89,7 +89,7 @@ class EventRecord
         key = year + "-" + month
         temp_array = @@events_date[key]
         for i in (0...temp_array.length)
-          if temp_array[i][1] == day
+          if temp_array[i][1] == day && temp_array[i][0] == name
             temp_array[i..i] = []
             @@events_name[@@events_name.index(name)..@@events_name.index(name)] = []
             @@events_date[key] = temp_array
