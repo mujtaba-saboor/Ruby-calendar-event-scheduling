@@ -1,5 +1,5 @@
-require_relative "e_record.rb"
-# require_relative "e_record_w_datetime.rb"
+require_relative "event_record.rb"
+# require_relative "event_record_with_datetime.rb"
   
 loop do 
   puts
@@ -9,7 +9,7 @@ loop do
   puts "For Deleting an event, Enter: 4"
   puts "To Quit, Enter 5"
   line = gets.chomp
-  e = []
+  events = []
   count = -1
   case line
   when "1"
@@ -17,12 +17,12 @@ loop do
     check = "y"
     while (check == "y")
       count += 1
-      e << EventRecord.add_event  
+      events << EventRecord.add_event  
       print "Enter name of the Event\n"
       name = gets.chomp
       print "Enter date for the event (yy:mm:dd)\n"
       date = gets.chomp
-      e[count].add_event_details(name,date)
+      events[count].add_event_details(name,date)
       print "Do u wish to add another event(y/n)?"
       check = gets.chomp
     end
