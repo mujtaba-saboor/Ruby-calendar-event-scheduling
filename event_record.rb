@@ -40,6 +40,7 @@ class EventRecord
   
   def self.events_for_given_month
     if @@events_details.length == 0
+      @@id = 0
       puts "No event added yet"
     else
       begin
@@ -61,21 +62,23 @@ class EventRecord
           @@events_date[key].each do |n|
             temp_event_detail_hash[n[1].to_i] << n[0]
           end
-          temp_event_detail_hash = temp_event_detail_hash.sort.to_h
-          print_counter = 0
-          range.each do |x|
-            if temp_event_detail_hash.has_key? (x)
-              print "#{x}: #{temp_event_detail_hash[x]} "
-              print_counter += 1
-            else
-              print "#{x} \t"
-              print_counter += 1
-            end
-            if print_counter == 4
-              print_counter = 0
-              puts 
-            end
-          end
+
+        puts "Mon Tue Wed Thu Fri Sat Sun"
+        dates = [nil] * 2 + (1..range.last).to_a
+        dates.each_slice(7) do |week|
+          puts week.map { |date|
+          if temp_event_detail_hash.has_key?(date)
+            "["+date.to_s+"]"
+           else
+           date.to_s.rjust(3)
+           end 
+            }.join(' ')
+        end
+        puts
+        temp_event_detail_hash = temp_event_detail_hash.sort.to_h
+        temp_event_detail_hash.each do |key, value|
+          puts "#{key}: #{value} "
+        end
         else
           puts "No Events Found"
         end
@@ -88,6 +91,7 @@ class EventRecord
    def self.events_for_given_date
     if @@events_details.length == 0
       puts "No event added yet"
+      @@id = 0
     else
       begin
         print "Enter the required date (yyyy-mm-dd)\n"
@@ -119,6 +123,7 @@ class EventRecord
   def self.delete_event
     if @@events_details.length == 0
       puts "No event added yet"
+      @@id = 0
     else
       print "Enter an Id from the list of events given below\n"
       self.return_all_events
