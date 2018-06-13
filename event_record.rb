@@ -130,14 +130,12 @@ class EventRecord
           day = @@events_details[id_entered].date.day
           name = @@events_details[id_entered].name
           key = year.to_s + "-" + month.to_s
-          flag = 0  
           temp_event_detail_array = @@events_date[key]
           for i in (0...temp_event_detail_array.length)
             if temp_event_detail_array[i][1] == day && temp_event_detail_array[i][0] == name 
               temp_event_detail_array[i..i] = []
               @@events_details.delete(id_entered)
               @@events_date[key] = temp_event_detail_array
-              flag = 1
               puts "Event Deleted"
               break
             end
