@@ -28,8 +28,8 @@ class EventRecord
     if @@events_details.length == 0
       puts "No event added yet"
     else
-      @@events_details.each.with_index(1) do |n,idx|
-        puts "#{idx}:  #{n} "
+      @@events_details.each.with_index(1) do |event_detail, index|
+        puts "#{index}:  #{event_detail} "
     end
     end
   end
@@ -43,11 +43,11 @@ class EventRecord
       puts "No event added yet"
     else
       begin
-        print "Enter the required year\n"
+        print "Enter the required year (yyyy)\n"
         year = gets.strip.to_i
-        print "Enter the required month\n"
+        print "Enter the required month (mm)\n"
         month = gets.strip.to_i
-        date = DateTime.new(year,month)
+        date = DateTime.new(year, month)
         key = date.year.to_s + "-" + date.month.to_s
         if [1, 3, 5, 7, 8, 10, 12].include?(date.month)
           range = (1..31)
@@ -56,23 +56,23 @@ class EventRecord
         else
           range = (1..28)
         end
-        tmp_hash = Hash.new{|h,k| h[k] = [] }
+        temp_event_detail_hash = Hash.new{ |h, k| h[k] = [] }
         if @@events_date.has_key? (key)
           @@events_date[key].each do |n|
-            tmp_hash[n[1].to_i] << n[0]
+            temp_event_detail_hash[n[1].to_i] << n[0]
           end
-          tmp_hash = tmp_hash.sort.to_h
-          c = 0
+          temp_event_detail_hash = temp_event_detail_hash.sort.to_h
+          print_counter = 0
           range.each do |x|
-            if tmp_hash.has_key? (x)
-              print "#{x}: #{tmp_hash[x]} "
-              c += 1
+            if temp_event_detail_hash.has_key? (x)
+              print "#{x}: #{temp_event_detail_hash[x]} "
+              print_counter += 1
             else
               print "#{x} \t"
-              c += 1
+              print_counter += 1
             end
-            if c == 4
-              c = 0
+            if print_counter == 4
+              print_counter = 0
               puts 
             end
           end
@@ -90,19 +90,19 @@ class EventRecord
       puts "No event added yet"
     else
       begin
-        print "Enter the required date\n"
+        print "Enter the required date (yyyy-mm-dd)\n"
         date = gets.strip.split("-")
         date = DateTime.new(date[0].to_i, date[1].to_i, date[2].to_i)
         key = date.year.to_s + "-" + date.month.to_s
-        tmp_hash = Hash.new{|h,k| h[k] = [] }
+        temp_event_detail_hash = Hash.new{ |h, k| h[k] = [] }
         if @@events_date.has_key? (key)
           @@events_date[key].each do |n|
-            tmp_hash[n[1].to_i] << n[0]
+            temp_event_detail_hash[n[1].to_i] << n[0]
           end
-          tmp_hash = tmp_hash.sort.to_h
-          tmp_hash.each do |x|
-            if tmp_hash.has_key? (date.day)
-              print " Event(s) Scheduled: #{tmp_hash[date.day]} \t"
+          temp_event_detail_hash = temp_event_detail_hash.sort.to_h
+          temp_event_detail_hash.each do |x|
+            if temp_event_detail_hash.has_key? (date.day)
+              print " Event(s) Scheduled: #{temp_event_detail_hash[date.day]} \t"
             else
               puts "No Events Found"  
             end
@@ -142,6 +142,14 @@ class EventRecord
               break
             end
           end
+                  ##does not function##
+          # @@events_date[key].each do |element| 
+          #   if element[1] == day && element[0] == name 
+          #     @@events_date[key].delete(element)
+          #     @@events_details.delete(id_entered)
+          #     puts "Event Deleted"
+          #   end
+          # end
         else
           puts "Event not found"
         end

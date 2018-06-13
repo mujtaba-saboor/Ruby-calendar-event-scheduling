@@ -8,7 +8,7 @@ loop do
   puts "For Viewing all events, Enter: 4"
   puts "For Deleting an event, Enter: 5"
   puts "To Quit, Enter 6"
-  line = gets.chomp
+  line = gets.strip
   events = []
   count = -1
   case line
@@ -19,12 +19,12 @@ loop do
         count += 1
         events << EventRecord.add_event  
         print "Enter name of the Event\n"
-        name = gets.chomp
-        print "Enter date for the event (yy:mm:dd)\n"
-        date = gets.chomp
+        name = gets.strip
+        print "Enter date for the event (yyyy:mm:dd)\n"
+        date = gets.strip
         events[count].add_event_details(name, date)
         print "Do u wish to add another event(y/n)?"
-        check = gets.chomp
+        check = gets.strip
       end
     when event[:month_view]
       puts
