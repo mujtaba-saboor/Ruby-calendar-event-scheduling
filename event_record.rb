@@ -103,7 +103,6 @@ class EventRecord
           @@events_date[key].each do |n|
             temp_event_detail_hash[n[1].to_i] << n[0]
           end
-          temp_event_detail_hash = temp_event_detail_hash.sort.to_h
           if temp_event_detail_hash.has_key? (date.day)
             print " Event(s) Scheduled: #{temp_event_detail_hash[date.day]} \t"
           else
