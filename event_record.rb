@@ -124,25 +124,25 @@ class EventRecord
       self.return_all_events
       begin
         id_entered = gets.strip.to_i 
-        year = @@events_details[id_entered].date.year
-        month = @@events_details[id_entered].date.month
-        day = @@events_details[id_entered].date.day
-        name = @@events_details[id_entered].name
-        key = year.to_s + "-" + month.to_s
-        flag = 0  
-        temp_array = @@events_date[key]
-        for i in (0...temp_array.length)
-          if temp_array[i][1] == day && temp_array[i][0] == name 
-            temp_array[i..i] = []
-            @@events_details.delete(id_entered)
-            @@events_date[key] = temp_array
-            flag = 1
-            puts "Event Deleted"
-            break
+        if @@events_details.has_key?(id_entered)
+          year = @@events_details[id_entered].date.year
+          month = @@events_details[id_entered].date.month
+          day = @@events_details[id_entered].date.day
+          name = @@events_details[id_entered].name
+          key = year.to_s + "-" + month.to_s
+          flag = 0  
+          temp_array = @@events_date[key]
+          for i in (0...temp_array.length)
+            if temp_array[i][1] == day && temp_array[i][0] == name 
+              temp_array[i..i] = []
+              @@events_details.delete(id_entered)
+              @@events_date[key] = temp_array
+              flag = 1
+              puts "Event Deleted"
+              break
+            end
           end
-        end
-
-        if flag == 0
+        else
           puts "Event not found"
         end
       rescue 
