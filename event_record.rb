@@ -29,7 +29,7 @@ class EventRecord
       puts "No event added yet"
     else
       @@events_details.each do |key, event_detail|
-        puts "ID: #{event_detail.id} Name: #{event_detail.name} Date: #{event_detail.date.year}-#{event_detail.date.month}-#{event_detail.date.day} "
+        puts "ID: #{event_detail.id} Name: #{event_detail.name.ljust(7)} Date: #{event_detail.date.year}-#{event_detail.date.month}-#{event_detail.date.day} "
     end
     end
   end
@@ -104,12 +104,10 @@ class EventRecord
             temp_event_detail_hash[n[1].to_i] << n[0]
           end
           temp_event_detail_hash = temp_event_detail_hash.sort.to_h
-          temp_event_detail_hash.each do |x|
-            if temp_event_detail_hash.has_key? (date.day)
-              print " Event(s) Scheduled: #{temp_event_detail_hash[date.day]} \t"
-            else
-              puts "No Events Found"  
-            end
+          if temp_event_detail_hash.has_key? (date.day)
+            print " Event(s) Scheduled: #{temp_event_detail_hash[date.day]} \t"
+          else
+            puts "No Events Found"  
           end
         else
           puts "No Events Found"
