@@ -28,8 +28,8 @@ class EventRecord
     if @@events_details.length == 0
       puts "No event added yet"
     else
-      @@events_details.each.with_index(1) do |event_detail, index|
-        puts "#{index}:  #{event_detail} "
+      @@events_details.each do |key, event_detail|
+        puts "ID: #{event_detail.id} Name: #{event_detail.name} Date: #{event_detail.date.year}-#{event_detail.date.month}-#{event_detail.date.day} "
     end
     end
   end
