@@ -1,12 +1,17 @@
+require 'date'
+require_relative 'event_details'
 class EventRecord
   @@events_date = {}
-  @@events_name = []
+  @@events_details = {}
+  @@id = 0
   def add_event_details(name,date)
     begin
-      date = date.split("-")
-      key = date[0] + "-" + date[1].to_i.to_s
-      day = date[2].to_i.to_s
-      @@events_name << name
+      date = date.strip.split("-")
+      date = DateTime.new(date[0].to_i, date[1].to_i, date[2].to_i)
+      @@id += 1
+      @@events_details[@@id] = Event_Details.new(@@id, name, date)
+      key = date.year.to_s + "-" + date.month.to_s
+      day = date.day
       if @@events_date.has_key? (key)
         @@events_date[key].push([name,day])
       else
@@ -20,11 +25,11 @@ class EventRecord
   end
   
   def self.return_all_events
-    if @@events_name.length == 0
+    if @@events_details.length == 0
       puts "No event added yet"
     else
-      @@events_name.each.with_index(1) do |n,idx|
-        puts "#{idx}: #{n}"
+      @@events_details.each.with_index(1) do |n,idx|
+        puts "#{idx}:  #{n} "
     end
     end
   end
@@ -34,33 +39,72 @@ class EventRecord
   end
   
   def self.events_for_given_month
-    if @@events_name.length == 0
+    if @@events_details.length == 0
       puts "No event added yet"
     else
       begin
         print "Enter the required year\n"
-        year = gets.chomp
+        year = gets.strip.to_i
         print "Enter the required month\n"
-        month = gets.chomp.to_i.to_s
-        if [1,3,5,7,8,10,12].include?(month.to_i)
+        month = gets.strip.to_i
+        date = DateTime.new(year,month)
+        key = date.year.to_s + "-" + date.month.to_s
+        if [1,3,5,7,8,10,12].include?(date.month)
           range = (1..31)
-        elsif [4,6,9,11].include?(month.to_i)
+        elsif [4,6,9,11].include?(date.month)
           range = (1..30)
         else
           range = (1..28)
         end
         tmp_hash = Hash.new{|h,k| h[k] = [] }
-        key = year + "-" + month
         if @@events_date.has_key? (key)
           @@events_date[key].each do |n|
             tmp_hash[n[1].to_i] << n[0]
           end
           tmp_hash = tmp_hash.sort.to_h
+          c = 0
           range.each do |x|
             if tmp_hash.has_key? (x)
-              print "Date #{x}: Event Scheduled: #{tmp_hash[x]}\n"
+              print "#{x}: #{tmp_hash[x]} "
+              c += 1
             else
-              print "Date #{x}: \n"
+              print "#{x} \t"
+              c += 1
+            end
+            if c == 4
+              c = 0
+              puts 
+            end
+          end
+        else
+          puts "No Events Found"
+        end
+      rescue 
+        puts "Incorrect Data"
+      end
+    end
+  end
+
+   def self.events_for_given_date
+    if @@events_details.length == 0
+      puts "No event added yet"
+    else
+      begin
+        print "Enter the required date\n"
+        date = gets.strip.split("-")
+        date = DateTime.new(date[0].to_i, date[1].to_i, date[2].to_i)
+        key = date.year.to_s + "-" + date.month.to_s
+        tmp_hash = Hash.new{|h,k| h[k] = [] }
+        if @@events_date.has_key? (key)
+          @@events_date[key].each do |n|
+            tmp_hash[n[1].to_i] << n[0]
+          end
+          tmp_hash = tmp_hash.sort.to_h
+          tmp_hash.each do |x|
+            if tmp_hash.has_key? (date.day)
+              print " Event(s) Scheduled: #{tmp_hash[date.day]} \t"
+            else
+              puts "No Events Found"  
             end
           end
         else
@@ -73,25 +117,24 @@ class EventRecord
   end
   
   def self.delete_event
-    if @@events_name.length == 0
+    if @@events_details.length == 0
       puts "No event added yet"
     else
+      print "Enter an Id from the list of events given below\n"
+      self.return_all_events
       begin
-        print  "Enter name of the Event to delete \n"
-        name = gets.chomp
-        print  "Enter date of the Event to delete (yy:mm:dd)\n"
-        date = gets.chomp
-        date = date.split("-")
-        year = date[0]
-        month = date[1].to_i.to_s
-        day = date[2].to_i.to_s
+        id_entered = gets.strip.to_i 
+        year = @@events_details[id_entered].date.year
+        month = @@events_details[id_entered].date.month
+        day = @@events_details[id_entered].date.day
+        name = @@events_details[id_entered].name
+        key = year.to_s + "-" + month.to_s
         flag = 0  
-        key = year + "-" + month
         temp_array = @@events_date[key]
         for i in (0...temp_array.length)
-          if temp_array[i][1] == day && temp_array[i][0] == name
+          if temp_array[i][1] == day && temp_array[i][0] == name 
             temp_array[i..i] = []
-            @@events_name[@@events_name.index(name)..@@events_name.index(name)] = []
+            @@events_details.delete(id_entered)
             @@events_date[key] = temp_array
             flag = 1
             puts "Event Deleted"
