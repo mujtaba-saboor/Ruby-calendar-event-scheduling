@@ -4,7 +4,7 @@ class EventRecord
   @@events_date = {}
   @@events_details = {}
   @@id = 0
-  def add_event_details(name,date)
+  def add_event_details(name, date)
     begin
       date = date.strip.split("-")
       date = DateTime.new(date[0].to_i, date[1].to_i, date[2].to_i)
@@ -13,10 +13,10 @@ class EventRecord
       key = date.year.to_s + "-" + date.month.to_s
       day = date.day
       if @@events_date.has_key? (key)
-        @@events_date[key].push([name,day])
+        @@events_date[key].push([name, day])
       else
         @@events_date[key] = Array.new
-        @@events_date[key].push([name,day])
+        @@events_date[key].push([name, day])
       end
       print "Event added\n"
       rescue
@@ -49,9 +49,9 @@ class EventRecord
         month = gets.strip.to_i
         date = DateTime.new(year,month)
         key = date.year.to_s + "-" + date.month.to_s
-        if [1,3,5,7,8,10,12].include?(date.month)
+        if [1, 3, 5, 7, 8, 10, 12].include?(date.month)
           range = (1..31)
-        elsif [4,6,9,11].include?(date.month)
+        elsif [4, 6, 9, 11].include?(date.month)
           range = (1..30)
         else
           range = (1..28)

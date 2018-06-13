@@ -22,7 +22,7 @@ loop do
         name = gets.chomp
         print "Enter date for the event (yy:mm:dd)\n"
         date = gets.chomp
-        events[count].add_event_details(name,date)
+        events[count].add_event_details(name, date)
         print "Do u wish to add another event(y/n)?"
         check = gets.chomp
       end
