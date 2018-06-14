@@ -7,7 +7,7 @@ class EventRecord
 
   def add_event_details(name, date)
     begin
-      date = Date.parse(date,"%d-%b-%y")
+      date = Date.parse(date)
       @@id += 1
       @@events_details[@@id] = Event_Details.new(@@id, name, date)
       year_month_key = "#{date.year.to_s}-#{date.month.to_s}"
