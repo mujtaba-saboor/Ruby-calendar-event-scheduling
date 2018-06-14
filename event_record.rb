@@ -142,14 +142,6 @@ class EventRecord
               break
             end
           end
-                  ##does not function##
-          # @@events_date[key].each do |element| 
-          #   if element[1] == day && element[0] == name 
-          #     @@events_date[key].delete(element)
-          #     @@events_details.delete(id_entered)
-          #     puts "Event Deleted"
-          #   end
-          # end
         else
           puts "Event not found"
         end
