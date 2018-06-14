@@ -19,10 +19,6 @@ class EventRecord
     end
   end
 
-  def self.return_date
-    date = Date.parse(gets.strip,"%d-%b-%y")
-  end
-
   def self.return_all_events
     if @@events_details.length == 0
       puts "No event added yet"
@@ -99,8 +95,8 @@ class EventRecord
         year_month_key = "#{date.year.to_s}-#{date.month.to_s}"
         month_event_detail_hash = Hash.new{ |hash, key| hash[key] = [] }
         if @@events_date.has_key? (year_month_key)
-          @@events_date[year_month_key].each do |n|
-            month_event_detail_hash[n[1].to_i] << n[0]
+          @@events_date[year_month_key].each do |name_day|
+            month_event_detail_hash[name_day[1].to_i] << name_day[0]
           end
           if month_event_detail_hash.has_key? (date.day)
             puts "Event(s) Scheduled: #{month_event_detail_hash[date.day]}"
