@@ -7,8 +7,7 @@ class EventRecord
 
   def add_event_details(name, date)
     begin
-      date = date.split("-")
-      date = DateTime.new(date[0].to_i, date[1].to_i, date[2].to_i)
+      date = Date.parse(date,"%d-%b-%y")
       @@id += 1
       @@events_details[@@id] = Event_Details.new(@@id, name, date)
       year_month_key = "#{date.year.to_s}-#{date.month.to_s}"
@@ -21,8 +20,7 @@ class EventRecord
   end
 
   def self.return_date
-    date = gets.strip.split("-")
-    date = DateTime.new(date[0].to_i, date[1].to_i, date[2].to_i)
+    date = Date.parse(gets.strip,"%d-%b-%y")
   end
 
   def self.return_all_events
@@ -97,7 +95,7 @@ class EventRecord
     else
       begin
         puts "Enter the required date (yyyy-mm-dd)"
-        date = self.return_date
+        date = Date.parse(gets.strip)
         year_month_key = "#{date.year.to_s}-#{date.month.to_s}"
         month_event_detail_hash = Hash.new{ |hash, key| hash[key] = [] }
         if @@events_date.has_key? (year_month_key)
