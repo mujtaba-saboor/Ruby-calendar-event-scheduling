@@ -56,8 +56,8 @@ class EventRecord
         end
         month_event_detail_hash = Hash.new{|hash, key| hash[key] = []}
         if @@events_date.has_key? (year_month_key)
-          @@events_date[year_month_key].each do |n|
-            month_event_detail_hash[n[1].to_i] << n[0]
+          @@events_date[year_month_key].each do |name_day|
+            month_event_detail_hash[name_day[1].to_i] << name_day[0]
           end
         puts "Mon Tue Wed Thu Fri Sat Sun"
         dates = [nil] * 2 + (1..range.last).to_a
