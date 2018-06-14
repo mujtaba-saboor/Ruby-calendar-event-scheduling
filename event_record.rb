@@ -1,35 +1,36 @@
 require 'date'
 require_relative 'event_details'
 class EventRecord
-  @@events_date = {}
+  @@events_date = Hash.new{|hash, key| hash[key] = []}
   @@events_details = {}
   @@id = 0
+
   def add_event_details(name, date)
     begin
-      date = date.strip.split("-")
+      date = date.split("-")
       date = DateTime.new(date[0].to_i, date[1].to_i, date[2].to_i)
       @@id += 1
       @@events_details[@@id] = Event_Details.new(@@id, name, date)
-      key = date.year.to_s + "-" + date.month.to_s
+      year_month_key = "#{date.year.to_s}-#{date.month.to_s}"
       day = date.day
-      if @@events_date.has_key? (key)
-        @@events_date[key].push([name, day])
-      else
-        @@events_date[key] = Array.new
-        @@events_date[key].push([name, day])
-      end
-      print "Event added\n"
+      @@events_date[year_month_key].push([name, day])
+      puts "Event added"
       rescue
         puts "Incorrect Data"
     end
   end
-  
+
+  def self.return_date
+    date = gets.strip.split("-")
+    date = DateTime.new(date[0].to_i, date[1].to_i, date[2].to_i)
+  end
+
   def self.return_all_events
     if @@events_details.length == 0
       puts "No event added yet"
     else
       @@events_details.each do |key, event_detail|
-        puts "ID: #{event_detail.id} Name: #{event_detail.name.ljust(7)} Date: #{event_detail.date.year}-#{event_detail.date.month}-#{event_detail.date.day} "
+        puts "ID: #{event_detail.id} Name: #{event_detail.event_name.ljust(7)} Date: #{event_detail.date.strftime("%Y/%m/%d")}"
     end
     end
   end
@@ -44,30 +45,31 @@ class EventRecord
       puts "No event added yet"
     else
       begin
-        print "Enter the required year (yyyy)\n"
+        puts "Enter the required year (yyyy)"
         year = gets.strip.to_i
-        print "Enter the required month (mm)\n"
+        puts "Enter the required month (mm)"
         month = gets.strip.to_i
         date = DateTime.new(year, month)
-        key = date.year.to_s + "-" + date.month.to_s
+        year_month_key = "#{date.year.to_s}-#{date.month.to_s}"
         if [1, 3, 5, 7, 8, 10, 12].include?(date.month)
           range = (1..31)
         elsif [4, 6, 9, 11].include?(date.month)
           range = (1..30)
+        elsif Date.leap?(date.year)
+          range = (1..29)
         else
           range = (1..28)
         end
-        temp_event_detail_hash = Hash.new{ |h, k| h[k] = [] }
-        if @@events_date.has_key? (key)
-          @@events_date[key].each do |n|
-            temp_event_detail_hash[n[1].to_i] << n[0]
+        month_event_detail_hash = Hash.new{|hash, key| hash[key] = []}
+        if @@events_date.has_key? (year_month_key)
+          @@events_date[year_month_key].each do |n|
+            month_event_detail_hash[n[1].to_i] << n[0]
           end
-
         puts "Mon Tue Wed Thu Fri Sat Sun"
         dates = [nil] * 2 + (1..range.last).to_a
         dates.each_slice(7) do |week|
           puts week.map { |date|
-          if temp_event_detail_hash.has_key?(date)
+          if month_event_detail_hash.has_key?(date)
             "["+date.to_s+"]"
            else
            date.to_s.rjust(3)
@@ -75,8 +77,8 @@ class EventRecord
             }.join(' ')
         end
         puts
-        temp_event_detail_hash = temp_event_detail_hash.sort.to_h
-        temp_event_detail_hash.each do |key, value|
+        month_event_detail_hash = month_event_detail_hash.sort.to_h
+        month_event_detail_hash.each do |key, value|
           puts "#{key}: #{value} "
         end
         else
@@ -94,17 +96,16 @@ class EventRecord
       @@id = 0
     else
       begin
-        print "Enter the required date (yyyy-mm-dd)\n"
-        date = gets.strip.split("-")
-        date = DateTime.new(date[0].to_i, date[1].to_i, date[2].to_i)
-        key = date.year.to_s + "-" + date.month.to_s
-        temp_event_detail_hash = Hash.new{ |h, k| h[k] = [] }
-        if @@events_date.has_key? (key)
-          @@events_date[key].each do |n|
-            temp_event_detail_hash[n[1].to_i] << n[0]
+        puts "Enter the required date (yyyy-mm-dd)"
+        date = self.return_date
+        year_month_key = "#{date.year.to_s}-#{date.month.to_s}"
+        month_event_detail_hash = Hash.new{ |hash, key| hash[key] = [] }
+        if @@events_date.has_key? (year_month_key)
+          @@events_date[year_month_key].each do |n|
+            month_event_detail_hash[n[1].to_i] << n[0]
           end
-          if temp_event_detail_hash.has_key? (date.day)
-            print " Event(s) Scheduled: #{temp_event_detail_hash[date.day]} \t"
+          if month_event_detail_hash.has_key? (date.day)
+            puts "Event(s) Scheduled: #{month_event_detail_hash[date.day]}"
           else
             puts "No Events Found"  
           end
@@ -122,7 +123,7 @@ class EventRecord
       puts "No event added yet"
       @@id = 0
     else
-      print "Enter an Id from the list of events given below\n"
+      puts "Enter an Id from the list of events given below"
       self.return_all_events
       begin
         id_entered = gets.strip.to_i 
@@ -130,16 +131,13 @@ class EventRecord
           year = @@events_details[id_entered].date.year
           month = @@events_details[id_entered].date.month
           day = @@events_details[id_entered].date.day
-          name = @@events_details[id_entered].name
-          key = year.to_s + "-" + month.to_s
-          temp_event_detail_array = @@events_date[key]
-          for i in (0...temp_event_detail_array.length)
-            if temp_event_detail_array[i][1] == day && temp_event_detail_array[i][0] == name 
-              temp_event_detail_array[i..i] = []
+          name = @@events_details[id_entered].event_name
+          year_month_key = "#{year.to_s}-#{month.to_s}"
+          @@events_date[year_month_key].each do |event_day| 
+            if event_day[1] == day && event_day[0] == name 
+              @@events_date[year_month_key].delete(event_day)
               @@events_details.delete(id_entered)
-              @@events_date[key] = temp_event_detail_array
               puts "Event Deleted"
-              break
             end
           end
         else
