@@ -18,12 +18,12 @@ loop do
       while (check == "y")
         count += 1
         events << EventRecord.add_event  
-        print "Enter name of the Event\n"
+        puts "Enter name of the Event"
         name = gets.strip
-        print "Enter date for the event (yyyy:mm:dd)\n"
+        puts "Enter date for the event (yyyy:mm:dd)"
         date = gets.strip
         events[count].add_event_details(name, date)
-        print "Do u wish to add another event(y/n)?"
+        puts "Do u wish to add another event(y/n)?"
         check = gets.strip
       end
     when event[:month_view]
@@ -39,8 +39,7 @@ loop do
       puts
       EventRecord.delete_event
     when event[:exit]
-      puts
-      p "Thank You"
+      puts "Thank You"
       break
     else
       puts "Kindly choose the correct option"

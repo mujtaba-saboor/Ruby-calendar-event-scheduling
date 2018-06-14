@@ -1,8 +1,8 @@
 class Event_Details
-  attr_accessor  :name, :date, :id
-  def initialize (id, name, date)
+  attr_accessor  :event_name, :date, :id
+  def initialize (id, event_name, date)
     @id = id
-    @name = name
+    @event_name = event_name
     @date = date
   end
 end
