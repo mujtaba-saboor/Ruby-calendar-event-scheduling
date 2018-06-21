@@ -1,6 +1,7 @@
-class Event_Details
-  attr_accessor  :event_name, :date, :id
-  def initialize (id, event_name, date)
+# event details
+class EventDetails
+  attr_accessor :event_name, :date, :id
+  def initialize(id, event_name, date)
     @id = id
     @event_name = event_name
     @date = date
