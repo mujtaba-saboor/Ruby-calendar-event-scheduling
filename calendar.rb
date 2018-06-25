@@ -1,4 +1,4 @@
-# calendar
+# class documentation
 require 'date'
 require_relative 'event_details'
 class Calendar
@@ -58,7 +58,6 @@ class Calendar
              }.join('   ')
       end
       puts
-      month_event_detail_hash = month_event_detail_hash.sort.to_h
       month_event_detail_hash.each do |key, event_detail|
         event_detail.each do |event|
           puts "ID: #{event.id} Name: #{event.event_name.ljust(7)} Date: #{key.strftime('%Y/%m/%d')}"
